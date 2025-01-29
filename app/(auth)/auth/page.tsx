@@ -6,26 +6,27 @@ import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { createClient } from '@/lib/supabase/client'
+// import { createClient } from '@/lib/supabase/client'
 
 export default function Auth() {
     const handleLoginWithOAuth = async () => {
-        try {
-            const supabase = createClient()
-            const { data, error } = await supabase.auth.signInWithOAuth({
-                provider: 'google',
-                options: {
-                    redirectTo: `${window.location.origin}/auth/callback`
-                }
-            })
+        // try {
+        //     const supabase = createClient()
+        //     const { data, error } = await supabase.auth.signInWithOAuth({
+        //         provider: 'google',
+        //         options: {
+        //             redirectTo: `${window.location.origin}/auth/callback`
+        //         }
+        //     })
 
-            if (error) {
-                throw error
-            }
+        //     if (error) {
+        //         throw error
+        //     }
 
-        } catch (error) {
-            console.error('Erro ao fazer login com Google:', error)
-        }
+        // } catch (error) {
+        //     console.error('Erro ao fazer login com Google:', error)
+        // }
+        console.log('Login with Google clicked')
     }
 
     return (

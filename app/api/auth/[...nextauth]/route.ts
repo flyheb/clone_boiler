@@ -1,8 +1,8 @@
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
-import { createClient } from '@/lib/supabase/server'
+// import { createClient } from '@/lib/supabase/server'
 
-const handler = NextAuth({
+/*const handler = NextAuth({
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -48,4 +48,4 @@ const handler = NextAuth({
   }
 })
 
-export { handler as GET, handler as POST } 
+export { handler as GET, handler as POST } */
