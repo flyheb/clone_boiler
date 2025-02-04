@@ -1,18 +1,16 @@
 import { createBrowserClient } from '@supabase/ssr'
-import { type Session } from 'next-auth'
+import { type Session } from '@supabase/supabase-js'
 
 export function createClient(session?: Session | null) {
-  const client = createBrowserClient(
+  return createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      global: {
+        headers: {
+          Authorization: session?.access_token ? `Bearer ${session.access_token}` : '',
+        },
+      },
+    }
   )
-
-  if (session?.accessToken) {
-    client.auth.setSession({
-      access_token: session.accessToken as string,
-      refresh_token: '',
-    })
-  }
-
-  return client
 }
