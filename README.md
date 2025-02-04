@@ -1,6 +1,6 @@
-# Next.js + Supabase + Auth.js Boilerplate
+# Next.js + Supabase Boilerplate
 
-Um boilerplate moderno e tipado para projetos Next.js com autenticação e banco de dados.
+Um boilerplate moderno e tipado para projetos Next.js com autenticação via Supabase e interface moderna usando shadcn/ui.
 
 ## 🚀 Tecnologias
 
@@ -8,7 +8,6 @@ Um boilerplate moderno e tipado para projetos Next.js com autenticação e banco
 - [React 18](https://reactjs.org/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Supabase](https://supabase.com/)
-- [Auth.js](https://authjs.dev/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [shadcn/ui](https://ui.shadcn.com/)
 
@@ -16,17 +15,16 @@ Um boilerplate moderno e tipado para projetos Next.js com autenticação e banco
 
 ```
 ├── app/                  # Rotas e páginas Next.js
-├── components/           # Componentes React reutilizáveis
-│   ├── ui/              # Componentes de UI (shadcn/ui)
-│   └── forms/           # Componentes de formulário
-├── hooks/               # Custom React hooks
-├── lib/                 # Bibliotecas compartilhadas
-├── services/            # Integrações com serviços externos
-│   ├── supabase/        # Cliente Supabase (SSR)
-│   └── auth/            # Configuração Auth.js
-├── styles/              # Arquivos de estilo
-├── types/               # Definições de tipos TypeScript
-└── utils/               # Funções utilitárias
+│   ├── (auth)/          # Grupo de rotas de autenticação
+│   └── (protected)/     # Grupo de rotas protegidas
+├── components/          # Componentes React reutilizáveis
+│   └── ui/             # Componentes de UI (shadcn/ui)
+├── contexts/           # Contextos React (AuthContext)
+├── hooks/             # Custom React hooks
+├── lib/              # Utilitários e configurações
+├── services/         # Integrações com serviços
+│   └── supabase/    # Cliente Supabase
+└── types/           # Definições de tipos TypeScript
 ```
 
 ## 🚦 Começando
@@ -48,12 +46,8 @@ cp .env.example .env.local
 
 4. Preencha as variáveis em `.env.local`:
 ```env
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
+NEXT_PUBLIC_SUPABASE_URL=sua_url_do_supabase
+NEXT_PUBLIC_SUPABASE_ANON_KEY=sua_chave_anon_do_supabase
 ```
 
 5. Inicie o servidor de desenvolvimento:
@@ -63,19 +57,29 @@ npm run dev
 
 ## 📝 Features
 
+- ✅ Autenticação com Email/Senha
 - ✅ Autenticação com Google
-- ✅ Supabase SSR
-- ✅ Tema escuro
-- ✅ UI Components modernos
-- ✅ Totalmente tipado
+- ✅ Proteção de rotas
 - ✅ Layout responsivo
+- ✅ Tema escuro
+- ✅ UI moderna com shadcn/ui
+- ✅ Totalmente tipado
+- ✅ Integração Supabase
+
+## 🔒 Páginas Protegidas
+
+- `/dashboard` - Painel principal
+- `/documentos` - Gerenciamento de documentos
+- `/pedidos` - Gerenciamento de pedidos
+- `/aplicacoes` - Gerenciamento de aplicações
+- `/compartilhar` - Compartilhamento de recursos
 
 ## 📚 Documentação
 
 - [Next.js](https://nextjs.org/docs)
 - [Supabase](https://supabase.com/docs)
-- [Auth.js](https://authjs.dev/reference/nextjs)
 - [shadcn/ui](https://ui.shadcn.com/docs)
+- [Tailwind CSS](https://tailwindcss.com/docs)
 
 ## 📄 Licença
 
