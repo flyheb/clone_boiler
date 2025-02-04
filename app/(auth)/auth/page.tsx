@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 export default function AuthPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [name, setName] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [message, setMessage] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -25,13 +26,20 @@ export default function AuthPage() {
     setIsLoading(true)
 
     try {
-      const { error } = await signInWithEmail(email, password)
+      const { data, error } = await signInWithEmail(email, password)
       if (error) {
+        console.error('Erro de login:', error)
         setError('Credenciais inválidas. Tente novamente.')
         return
       }
-      router.push('/dashboard')
+      
+      if (data?.session) {
+        router.push('/dashboard')
+      } else {
+        setError('Erro ao iniciar sessão. Tente novamente.')
+      }
     } catch (err) {
+      console.error('Erro inesperado:', err)
       setError('Ocorreu um erro ao fazer login. Tente novamente.')
     } finally {
       setIsLoading(false)
@@ -45,13 +53,24 @@ export default function AuthPage() {
     setIsLoading(true)
 
     try {
-      const { error } = await signUpWithEmail(email, password)
+      const { data, error } = await signUpWithEmail(email, password, name)
       if (error) {
+        console.error('Erro de cadastro:', error)
         setError('Erro ao criar conta. Tente novamente.')
         return
       }
-      setMessage('Verifique seu email para confirmar sua conta.')
+      
+      if (data) {
+        setMessage('Verifique seu email para confirmar sua conta.')
+        // Limpar os campos após sucesso
+        setEmail('')
+        setPassword('')
+        setName('')
+      } else {
+        setError('Erro ao criar conta. Tente novamente.')
+      }
     } catch (err) {
+      console.error('Erro inesperado:', err)
       setError('Ocorreu um erro ao criar sua conta. Tente novamente.')
     } finally {
       setIsLoading(false)
@@ -60,15 +79,25 @@ export default function AuthPage() {
 
   const handleGoogleLogin = async () => {
     try {
-      await signInWithOAuth('google')
+      const { error } = await signInWithOAuth('google')
+      if (error) {
+        console.error('Erro Google:', error)
+        setError('Erro ao fazer login com Google')
+      }
     } catch (err) {
+      console.error('Erro inesperado Google:', err)
       setError('Erro ao fazer login com Google')
     }
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-black">
-      <Card className="w-full max-w-md border-gray-800 bg-black text-white">
+    <div className="relative flex min-h-screen items-center justify-center bg-black overflow-hidden">
+      {/* Glow Effect */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+        <div className="w-[600px] h-[600px] rounded-full bg-gradient-to-r from-orange-500 to-yellow-500 opacity-30 blur-[100px]" />
+      </div>
+
+      <Card className="relative w-full max-w-md border-gray-800 bg-black/80 text-white backdrop-blur-sm">
         <CardHeader className="space-y-2">
           <h1 className="text-center text-3xl font-bold">Bem-vindo</h1>
           <p className="text-center text-sm text-gray-400">
@@ -114,10 +143,10 @@ export default function AuthPage() {
 
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-2 bg-gray-900">
-              <TabsTrigger value="login" className="data-[state=active]:bg-yellow-500 data-[state=active]:text-black">
+              <TabsTrigger value="login" className="data-[state=active]:bg-orange-500 data-[state=active]:text-black">
                 Login
               </TabsTrigger>
-              <TabsTrigger value="register" className="data-[state=active]:bg-yellow-500 data-[state=active]:text-black">
+              <TabsTrigger value="register" className="data-[state=active]:bg-orange-500 data-[state=active]:text-black">
                 Cadastro
               </TabsTrigger>
             </TabsList>
@@ -142,7 +171,7 @@ export default function AuthPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="border-gray-800 bg-black text-white placeholder-gray-400 focus:border-yellow-500"
+                  className="border-gray-800 bg-black/60 text-white placeholder-gray-400 focus:border-orange-500"
                 />
                 <Input
                   type="password"
@@ -150,12 +179,12 @@ export default function AuthPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="border-gray-800 bg-black text-white placeholder-gray-400 focus:border-yellow-500"
+                  className="border-gray-800 bg-black/60 text-white placeholder-gray-400 focus:border-orange-500"
                 />
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-yellow-500 text-black hover:bg-yellow-400"
+                  className="w-full bg-orange-500 text-black hover:bg-orange-400"
                 >
                   {isLoading ? 'Entrando...' : 'Entrar'}
                 </Button>
@@ -165,12 +194,20 @@ export default function AuthPage() {
             <TabsContent value="register">
               <form onSubmit={handleRegister} className="space-y-4">
                 <Input
+                  type="text"
+                  placeholder="Seu nome"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  className="border-gray-800 bg-black/60 text-white placeholder-gray-400 focus:border-orange-500"
+                />
+                <Input
                   type="email"
                   placeholder="seu@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="border-gray-800 bg-black text-white placeholder-gray-400 focus:border-yellow-500"
+                  className="border-gray-800 bg-black/60 text-white placeholder-gray-400 focus:border-orange-500"
                 />
                 <Input
                   type="password"
@@ -178,12 +215,12 @@ export default function AuthPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="border-gray-800 bg-black text-white placeholder-gray-400 focus:border-yellow-500"
+                  className="border-gray-800 bg-black/60 text-white placeholder-gray-400 focus:border-orange-500"
                 />
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-yellow-500 text-black hover:bg-yellow-400"
+                  className="w-full bg-orange-500 text-black hover:bg-orange-400"
                 >
                   {isLoading ? 'Criando conta...' : 'Criar conta'}
                 </Button>
