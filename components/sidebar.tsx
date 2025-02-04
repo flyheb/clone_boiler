@@ -1,100 +1,72 @@
 "use client"
 
-import { cn } from "@/utils/utils"
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet"
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
-import { Button } from "@/components/ui/button"
-import { MenuIcon, LayoutDashboard, FileText, ShoppingCart, LayoutGrid, Share2, Moon, User, LogOut } from "lucide-react"
-import { useState } from "react"
+import { useAuth } from "@/contexts/auth-context"
+import { cn } from "@/lib/utils"
+import { 
+  LayoutDashboard, 
+  FileText, 
+  ShoppingCart, 
+  LayoutGrid, 
+  Share2, 
+  LogOut 
+} from "lucide-react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+
+const menuItems = [
+  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/documentos', label: 'Documentos', icon: FileText },
+  { href: '/pedidos', label: 'Pedidos', icon: ShoppingCart },
+  { href: '/aplicacoes', label: 'Aplicações', icon: LayoutGrid },
+  { href: '/compartilhar', label: 'Compartilhar', icon: Share2 },
+]
 
 export function Sidebar() {
-  const [isOpen, setIsOpen] = useState(true)
+  const pathname = usePathname()
+  const { signOut, user } = useAuth()
 
   return (
-    <nav className={cn("h-screen border-r bg-background transition-all duration-300", 
-      isOpen ? "w-[200px]" : "w-[70px]")}>
-      <Sheet>
-        <SheetTrigger asChild className="lg:hidden">
-          <Button variant="ghost" size="icon" className="md:hidden">
-            <MenuIcon className="h-5 w-5" />
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="left" className="w-[240px] p-0">
-          <SidebarContent isCollapsed={!isOpen} />
-        </SheetContent>
-      </Sheet>
-
-      <Collapsible
-        open={isOpen}
-        onOpenChange={setIsOpen}
-        className="hidden lg:flex flex-col h-full"
-      >
-        <div className="space-y-4 py-4">
-          <div className="flex justify-end px-3">
-            <CollapsibleTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <MenuIcon className="h-5 w-5" />
-              </Button>
-            </CollapsibleTrigger>
-          </div>
-          <CollapsibleContent className="space-y-1" forceMount>
-            <SidebarContent isCollapsed={!isOpen} />
-          </CollapsibleContent>
-        </div>
-      </Collapsible>
-    </nav>
-  )
-}
-
-function SidebarContent({ isCollapsed }: { isCollapsed?: boolean }) {
-  return (
-    <div className="space-y-4 py-4">
-      <div className="px-3 space-y-1">
-        <Button variant="ghost" className="w-full justify-start">
-          <LayoutDashboard className="h-5 w-5" />
-          {!isCollapsed && <span className="ml-2">Dashboard</span>}
-        </Button>
-        <Button variant="ghost" className="w-full justify-start">
-          <FileText className="h-5 w-5" />
-          {!isCollapsed && <span className="ml-2">Documentos</span>}
-        </Button>
-        <Button variant="ghost" className="w-full justify-start">
-          <ShoppingCart className="h-5 w-5" />
-          {!isCollapsed && <span className="ml-2">Pedidos</span>}
-        </Button>
-        <Button variant="ghost" className="w-full justify-start">
-          <LayoutGrid className="h-5 w-5" />
-          {!isCollapsed && <span className="ml-2">Aplicações</span>}
-        </Button>
-        <Button variant="ghost" className="w-full justify-start">
-          <Share2 className="h-5 w-5" />
-          {!isCollapsed && <span className="ml-2">Compartilhar</span>}
-        </Button>
+    <aside className="flex h-screen w-64 flex-col bg-gray-800 text-white">
+      <div className="p-4">
+        <h2 className="text-xl font-bold">Boilerplate</h2>
+        <p className="mt-2 text-sm text-gray-400">{user?.email}</p>
       </div>
-      <div className={cn("fixed bottom-4 px-3", isCollapsed ? "w-[70px]" : "w-[240px]")}>
-        <div className="flex flex-col gap-4">
-          <div className="flex justify-between w-[150px]">
-            <Button variant="ghost" size="icon">
-              <Moon className="h-5 w-5" />
-            </Button>
-            <Button variant="ghost" size="icon">
-              <LogOut className="h-5 w-5" />
-            </Button>
-          </div>
-          <div className="flex items-center gap-2">
-            <User className="h-8 w-8 rounded-full bg-muted p-2" />
-            {!isCollapsed && <span className="text-sm">_username</span>}
-          </div>
-        </div>
+
+      <nav className="flex-1">
+        <ul className="space-y-1 px-2">
+          {menuItems.map((item) => {
+            const Icon = item.icon
+            const isActive = pathname === item.href
+
+            return (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className={cn(
+                    "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
+                    isActive
+                      ? "bg-gray-900 text-white"
+                      : "text-gray-400 hover:bg-gray-900 hover:text-white"
+                  )}
+                >
+                  <Icon className="h-5 w-5" />
+                  {item.label}
+                </Link>
+              </li>
+            )
+          })}
+        </ul>
+      </nav>
+
+      <div className="p-4">
+        <button
+          onClick={() => signOut()}
+          className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-gray-400 transition-colors hover:bg-gray-900 hover:text-white"
+        >
+          <LogOut className="h-5 w-5" />
+          Sair
+        </button>
       </div>
-    </div>
+    </aside>
   )
 }
