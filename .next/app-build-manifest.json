@@ -6,25 +6,45 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/page": [
+    "/auth/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
+      "static/chunks/app/auth/layout.js"
     ],
-    "/(auth)/layout": [
+    "/auth/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(auth)/layout.js"
+      "static/chunks/app/auth/page.js"
     ],
-    "/(auth)/auth/page": [
+    "/(protected)/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(auth)/auth/page.js"
+      "static/chunks/app/(protected)/layout.js"
     ],
-    "/(auth)/auth/callback/route": [
+    "/(protected)/dashboard/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(auth)/auth/callback/route.js"
+      "static/chunks/app/(protected)/dashboard/page.js"
+    ],
+    "/(protected)/documentos/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(protected)/documentos/page.js"
+    ],
+    "/(protected)/pedidos/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(protected)/pedidos/page.js"
+    ],
+    "/(protected)/compartilhar/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(protected)/compartilhar/page.js"
+    ],
+    "/(protected)/aplicacoes/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(protected)/aplicacoes/page.js"
     ]
   }
 }

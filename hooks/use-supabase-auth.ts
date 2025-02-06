@@ -1,4 +1,4 @@
-import { createClient } from '@/services/supabase/client'
+import { createClient } from '@/utils/supabase/client'
 import { type Provider } from '@supabase/supabase-js'
 
 export function useSupabaseAuth() {
@@ -45,18 +45,31 @@ export function useSupabaseAuth() {
         password,
         options: {
           data: {
-            name,
-          },
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-        },
+            full_name: name
+          }
+        }
       })
+
       if (error) {
-        console.error('Erro cadastro:', error.message)
+        console.error('Erro no cadastro:', error)
+        return { data: null, error }
       }
-      return { data, error }
+
+      console.log('Resposta do cadastro:', data)
+      return { data, error: null }
     } catch (err) {
-      console.error('Erro inesperado cadastro:', err)
+      console.error('Erro inesperado no cadastro:', err)
       return { data: null, error: err as Error }
+    }
+  }
+
+  const signOut = async () => {
+    try {
+      const { error } = await supabase.auth.signOut()
+      return { error }
+    } catch (err) {
+      console.error('Erro ao fazer logout:', err)
+      return { error: err as Error }
     }
   }
 
@@ -64,5 +77,6 @@ export function useSupabaseAuth() {
     signInWithOAuth,
     signInWithEmail,
     signUpWithEmail,
+    signOut,
   }
 } 

@@ -1,23 +1,31 @@
 'use client'
 
 import { Sidebar } from "@/components/sidebar"
-import { useAuth } from "@/contexts/auth-context"
+import { createClient } from '@/utils/supabase/client'
 import { redirect } from "next/navigation"
-import { type ReactNode } from 'react'
+import { type ReactNode, useEffect, useState } from 'react'
 
 export default function ProtectedLayout({
   children,
 }: {
   children: ReactNode
 }) {
-  const { isLoading, session } = useAuth()
+  const [isLoading, setIsLoading] = useState(true)
+  const supabase = createClient()
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        redirect('/auth')
+      }
+      setIsLoading(false)
+    }
+    checkSession()
+  }, [supabase])
 
   if (isLoading) {
-    return null // ou um componente de loading
-  }
-
-  if (!session) {
-    redirect('/auth')
+    return null
   }
 
   return (

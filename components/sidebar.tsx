@@ -1,6 +1,9 @@
 "use client"
 
-import { useAuth } from "@/contexts/auth-context"
+import { useSupabaseAuth } from "@/hooks/use-supabase-auth"
+import { createClient } from '@/utils/supabase/client'
+import { useEffect, useState } from 'react'
+import { usePathname, useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { 
   LayoutDashboard, 
@@ -11,7 +14,6 @@ import {
   LogOut 
 } from "lucide-react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
 
 const menuItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -22,8 +24,24 @@ const menuItems = [
 ]
 
 export function Sidebar() {
+  const [user, setUser] = useState<any>(null)
+  const { signOut } = useSupabaseAuth()
+  const supabase = createClient()
   const pathname = usePathname()
-  const { signOut, user } = useAuth()
+  const router = useRouter()
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      setUser(user)
+    }
+    getUser()
+  }, [supabase])
+
+  const handleSignOut = async () => {
+    await signOut()
+    router.push('/auth')
+  }
 
   return (
     <aside className="flex h-screen w-64 flex-col bg-gray-800 text-white">
@@ -60,7 +78,7 @@ export function Sidebar() {
 
       <div className="p-4">
         <button
-          onClick={() => signOut()}
+          onClick={handleSignOut}
           className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-gray-400 transition-colors hover:bg-gray-900 hover:text-white"
         >
           <LogOut className="h-5 w-5" />
