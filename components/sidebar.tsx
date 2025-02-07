@@ -55,8 +55,8 @@ export function Sidebar() {
       open={!isCollapsed}
       onOpenChange={(open) => setIsCollapsed(!open)}
       className={cn(
-        "flex h-screen flex-col bg-gray-800 text-white transition-all duration-300 relative",
-        isCollapsed ? "w-" : "w-64"
+        "flex h-screen flex-col bg-secondary/40 text-secondary-foreground transition-all duration-300 relative border-r border-border",
+        isCollapsed ? "w-16" : "w-64"
       )}
     >
       <div className="flex items-center justify-between p-4">
@@ -64,8 +64,8 @@ export function Sidebar() {
         <CollapsibleTrigger asChild>
           <button 
             className={cn(
-              "absolute -right-4 top-6 flex h-8 w-8 items-center justify-center rounded-full bg-gray-800 hover:bg-gray-700",
-              "border border-gray-600",
+              "absolute -right-4 top-6 flex h-8 w-8 items-center justify-center rounded-full bg-secondary/40 hover:bg-primary/10",
+              "border border-border",
               isCollapsed && "-right-4"
             )}
           >
@@ -92,10 +92,10 @@ export function Sidebar() {
                     href={item.href}
                     className={cn(
                       "flex items-center transition-colors rounded-lg",
-                      isCollapsed ? "justify-center px-2 py-2" : "gap-3 px-3 py-2",
+                      isCollapsed ? "justify-center w-10 h-10 mx-auto" : "gap-3 px-3 py-2",
                       isActive
-                        ? "bg-gray-900 text-white"
-                        : "text-gray-400 hover:bg-gray-900 hover:text-white"
+                        ? "bg-primary text-primary-foreground"
+                        : "text-muted-foreground hover:bg-primary/10 hover:text-primary"
                     )}
                   >
                     <Icon className="h-5 w-5" />
@@ -108,22 +108,16 @@ export function Sidebar() {
         </nav>
 
         <div className="mt-auto border-t border-gray-700">
-          <div className="flex items-center justify-between px-2">
-            <button
-              onClick={handleSignOut}
-              className={cn(
-                "flex items-center transition-colors rounded-lg",
-                isCollapsed ? "justify-center p-2" : "gap-3 p-3",
-                "text-gray-400 hover:bg-gray-900 hover:text-white"
-              )}
-            >
-              <LogOut className="h-5 w-5" />
-              {!isCollapsed}
-            </button>
-
+          <div className={cn(
+            "px-2 py-2",
+            isCollapsed ? "flex flex-col space-y-3" : "flex items-center justify-between"
+          )}>
             <button
               onClick={toggleTheme}
-              className="p-2 text-gray-400 hover:bg-gray-900 hover:text-white rounded-lg"
+              className={cn(
+                "text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-lg",
+                isCollapsed ? "w-10 h-10 flex items-center justify-center mx-auto" : "p-2"
+              )}
             >
               {theme === 'dark' ? (
                 <Sun className="h-5 w-5" />
@@ -131,14 +125,23 @@ export function Sidebar() {
                 <Moon className="h-5 w-5" />
               )}
             </button>
+
+            <button
+              onClick={handleSignOut}
+              className={cn(
+                "flex items-center transition-colors rounded-lg",
+                isCollapsed ? "w-10 h-10 justify-center mx-auto" : "gap-3 px-3 py-2",
+                "text-muted-foreground hover:bg-primary/10 hover:text-primary"
+              )}
+            >
+              <LogOut className="h-5 w-5" />
+              {!isCollapsed && "Sair"}
+            </button>
           </div>
 
-          {user && (
-            <div className={cn(
-              "px-3 py-2 text-sm text-gray-400",
-              isCollapsed && "text-center px-2"
-            )}>
-              {isCollapsed ? user.email?.[0] : user.email}
+          {!isCollapsed && user && (
+            <div className="px-3 py-2 text-sm text-gray-400">
+              {user.email}
             </div>
           )}
         </div>

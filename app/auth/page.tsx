@@ -226,9 +226,9 @@ export default function AuthPage() {
         </CardContent>
 
         <CardFooter>
-          <p className="w-full text-center text-xs text-gray-400">
+          {/*<p className="w-full text-center text-xs text-gray-400">
             Protegido por reCaptcha
-          </p>
+          </p>*/}
         </CardFooter>
       </Card>
     </div>
