@@ -6,6 +6,11 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
+    ],
     "/auth/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -25,26 +30,6 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(protected)/dashboard/page.js"
-    ],
-    "/(protected)/documentos/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/documentos/page.js"
-    ],
-    "/(protected)/pedidos/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/pedidos/page.js"
-    ],
-    "/(protected)/compartilhar/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/compartilhar/page.js"
-    ],
-    "/(protected)/aplicacoes/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(protected)/aplicacoes/page.js"
     ]
   }
 }
