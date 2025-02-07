@@ -12,10 +12,13 @@ import {
   LayoutGrid, 
   Share2, 
   LogOut,
-  ChevronLeft 
+  ChevronLeft,
+  Sun,
+  Moon
 } from "lucide-react"
 import Link from "next/link"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible"
+import { useTheme } from "@/hooks/use-theme"
 
 const menuItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -32,6 +35,7 @@ export function Sidebar() {
   const supabase = createClient()
   const pathname = usePathname()
   const router = useRouter()
+  const { theme, toggleTheme } = useTheme()
 
   useEffect(() => {
     const getUser = async () => {
@@ -52,7 +56,7 @@ export function Sidebar() {
       onOpenChange={(open) => setIsCollapsed(!open)}
       className={cn(
         "flex h-screen flex-col bg-gray-800 text-white transition-all duration-300 relative",
-        isCollapsed ? "w-20" : "w-64"
+        isCollapsed ? "w-" : "w-64"
       )}
     >
       <div className="flex items-center justify-between p-4">
@@ -60,14 +64,14 @@ export function Sidebar() {
         <CollapsibleTrigger asChild>
           <button 
             className={cn(
-              "absolute -right-3 top-6 flex h-6 w-6 items-center justify-center rounded-full bg-gray-800 hover:bg-gray-700",
+              "absolute -right-4 top-6 flex h-8 w-8 items-center justify-center rounded-full bg-gray-800 hover:bg-gray-700",
               "border border-gray-600",
-              isCollapsed && "-right-3"
+              isCollapsed && "-right-4"
             )}
           >
             <ChevronLeft 
               className={cn(
-                "h-4 w-4 transition-transform",
+                "h-7 w-7 transition-transform",
                 isCollapsed && "rotate-180"
               )} 
             />
@@ -77,7 +81,7 @@ export function Sidebar() {
 
       <CollapsibleContent forceMount className="flex flex-col h-full">
         <nav className="flex-1">
-          <ul className="space-y-1 px-2">
+          <ul className="space-y-3 px-2">
             {menuItems.map((item) => {
               const Icon = item.icon
               const isActive = pathname === item.href
@@ -104,17 +108,30 @@ export function Sidebar() {
         </nav>
 
         <div className="mt-auto border-t border-gray-700">
-          <button
-            onClick={handleSignOut}
-            className={cn(
-              "flex w-full items-center transition-colors",
-              isCollapsed ? "justify-center p-2" : "gap-3 p-3",
-              "text-gray-400 hover:bg-gray-900 hover:text-white"
-            )}
-          >
-            <LogOut className="h-5 w-5" />
-            {!isCollapsed && "Sair"}
-          </button>
+          <div className="flex items-center justify-between px-2">
+            <button
+              onClick={handleSignOut}
+              className={cn(
+                "flex items-center transition-colors rounded-lg",
+                isCollapsed ? "justify-center p-2" : "gap-3 p-3",
+                "text-gray-400 hover:bg-gray-900 hover:text-white"
+              )}
+            >
+              <LogOut className="h-5 w-5" />
+              {!isCollapsed}
+            </button>
+
+            <button
+              onClick={toggleTheme}
+              className="p-2 text-gray-400 hover:bg-gray-900 hover:text-white rounded-lg"
+            >
+              {theme === 'dark' ? (
+                <Sun className="h-5 w-5" />
+              ) : (
+                <Moon className="h-5 w-5" />
+              )}
+            </button>
+          </div>
 
           {user && (
             <div className={cn(

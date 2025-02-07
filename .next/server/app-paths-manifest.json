@@ -1,5 +1,3 @@
 {
-  "/page": "app/page.js",
-  "/(protected)/dashboard/page": "app/(protected)/dashboard/page.js",
-  "/auth/page": "app/auth/page.js"
+  "/(protected)/dashboard/page": "app/(protected)/dashboard/page.js"
 }
