@@ -1,7 +1,7 @@
 'use client'
 
 import { Sidebar } from "@/components/sidebar"
-import { createClient } from '@/utils/supabase/client'
+import { createClient } from '@/lib/supabase/client'
 import { redirect } from "next/navigation"
 import { type ReactNode, useEffect, useState } from 'react'
 

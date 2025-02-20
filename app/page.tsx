@@ -2,13 +2,8 @@
 
 import React from "react"
 import { Button } from "@/components/ui/button"
+import { redirect } from 'next/navigation'
 
-export default function Home() {
-  
-  return (
-    <div>
-      <Button>Hello World!</Button>
-    </div>
-  )
-
+export default function RootPage() {
+  redirect('/auth')
 }

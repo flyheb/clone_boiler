@@ -1,7 +1,7 @@
 "use client"
 
 import { useSupabaseAuth } from "@/hooks/use-supabase-auth"
-import { createClient } from '@/utils/supabase/client'
+import { createClient } from '@/lib/supabase/client'
 import { useEffect, useState } from 'react'
 import { usePathname, useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"

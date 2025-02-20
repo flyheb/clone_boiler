@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/client'
+import { createClient } from '@/lib/supabase/client'
 import { type Provider } from '@supabase/supabase-js'
 
 export function useSupabaseAuth() {
