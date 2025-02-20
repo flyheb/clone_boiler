@@ -1,6 +1,5 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
-import { updateSession } from '@/utils/supabase/middlewear'
 
 const protectedPaths = [
   '/dashboard',
@@ -10,10 +9,17 @@ const protectedPaths = [
   '/compartilhar'
 ]
 
-export async function middleware(request: NextRequest) {
-  // Atualiza a sessão primeiro
-  const response = await updateSession(request)
+const publicPaths = ['/auth']
 
+export async function middleware(request: NextRequest) {
+  // Criar resposta inicial
+  const response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  })
+
+  // Criar cliente Supabase
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -40,15 +46,27 @@ export async function middleware(request: NextRequest) {
     }
   )
 
+  // Verificar sessão
   const { data: { session } } = await supabase.auth.getSession()
 
-  // Verifica se o caminho atual está na lista de rotas protegidas
+  // Verificar se é rota pública
+  const isPublicPath = publicPaths.some(path => 
+    request.nextUrl.pathname.startsWith(path)
+  )
+
+  // Verificar se é rota protegida
   const isProtectedPath = protectedPaths.some(path => 
     request.nextUrl.pathname.startsWith(path)
   )
 
-  if (!session && isProtectedPath) {
+  // Se não tem sessão e não é rota pública, redireciona para login
+  if (!session && !isPublicPath) {
     return NextResponse.redirect(new URL('/auth', request.url))
+  }
+
+  // Se tem sessão e está tentando acessar auth, redireciona para dashboard
+  if (session && isPublicPath) {
+    return NextResponse.redirect(new URL('/dashboard', request.url))
   }
 
   return response
@@ -56,6 +74,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|auth).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
   ],
 }

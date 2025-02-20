@@ -1,5 +1,6 @@
 {
-  "/(protected)/compartilhar/page": "app/(protected)/compartilhar/page.js",
+  "/auth/callback/route": "app/auth/callback/route.js",
+  "/auth/page": "app/auth/page.js",
   "/(protected)/dashboard/page": "app/(protected)/dashboard/page.js",
-  "/auth/page": "app/auth/page.js"
+  "/(protected)/documentos/page": "app/(protected)/documentos/page.js"
 }
