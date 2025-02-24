@@ -1,5 +1,6 @@
-import { createServerClient } from '@supabase/ssr'
+import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { cookies } from 'next/headers'
+import { type User } from '@supabase/supabase-js'
 
 export async function createClient() {
   const cookieStore = await cookies()
@@ -12,21 +13,39 @@ export async function createClient() {
         get(name: string) {
           return cookieStore.get(name)?.value
         },
-        set(name: string, value: string, options: any) {
+        set(name: string, value: string, options: CookieOptions) {
           try {
             cookieStore.set(name, value, options)
-          } catch (error) {
-            // Handle cookie errors
+          } catch {
+            // Handle cookie errors silently
           }
         },
-        remove(name: string, options: any) {
+        remove(name: string, options: CookieOptions) {
           try {
             cookieStore.set(name, '', { ...options, maxAge: 0 })
-          } catch (error) {
-            // Handle cookie errors
+          } catch {
+            // Handle cookie errors silently
           }
         },
       },
     }
   )
+}
+
+export async function signInWithEmail(email: string, password: string): Promise<User | null> {
+  const supabase = await createClient()
+  const { data } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  })
+  return data?.user || null
+}
+
+export async function signUpWithEmail(email: string, password: string): Promise<User | null> {
+  const supabase = await createClient()
+  const { data } = await supabase.auth.signUp({
+    email,
+    password
+  })
+  return data?.user || null
 }

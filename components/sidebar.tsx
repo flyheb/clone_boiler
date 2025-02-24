@@ -19,6 +19,7 @@ import {
 import Link from "next/link"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible"
 import { useTheme } from "@/hooks/use-theme"
+import { User } from "@supabase/supabase-js"
 
 const menuItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -29,7 +30,7 @@ const menuItems = [
 ]
 
 export function Sidebar() {
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<User | null>(null)
   const [isCollapsed, setIsCollapsed] = useState(false)
   const { signOut } = useSupabaseAuth()
   const supabase = createClient()
